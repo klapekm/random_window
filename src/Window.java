@@ -15,21 +15,38 @@ public class Window extends JFrame implements ActionListener{
     private final JTextField fileSize;
     private final JTextField localization;
     private final JComboBox<String> generators;
+
     //Creating the window
     public Window() {
         super("Illin'");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(500, 250);
         setLocation(50, 50);
-        setLayout(new GridLayout(5, 3));
+        GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.HORIZONTAL;
+        setLayout(new GridBagLayout());
+        setResizable(false);
+
         //Adding an input window(file size)
-        add(new JLabel("File Size"));
+        c.gridx = 0;
+        c.gridy = 0;
+        c.ipadx = 75;
+        c.ipady = 25;
+        add(new JLabel("File Size"), c);
         fileSize = new JTextField();
-        add(fileSize);
+        fileSize.setText("100");
+        fileSize.setPreferredSize(new Dimension(75, 25));
+        c.gridx = 1;
+        c.gridy = 0;
+        add(fileSize,c);
         //Adding an input window(generator choice)
-        add(new JLabel("Generator"));
+        c.gridx = 0;
+        c.gridy = 1;
+        add(new JLabel("Generator"),c);
         generators = new JComboBox<>();
-        add(generators);
+        c.gridx = 1;
+        c.gridy = 1;
+        add(generators,c);
 
         Provider[] providers = Security.getProviders();
         for (Provider provider: providers) {
@@ -39,14 +56,25 @@ public class Window extends JFrame implements ActionListener{
                 }
             }
         }
+
         //Adding an input window(file path)
-        add(new JLabel("File Path"));
+        c.gridx = 0;
+        c.gridy = 2;
+        add(new JLabel("File Path"), c);
         localization = new JTextField();
-        add(localization);
+        localization.setPreferredSize(new Dimension(75, 25));
+        c.gridx = 1;
+        c.gridy = 2;
+        add(localization,c);
         //Generate file button
         generateButton = new JButton();
+        generateButton.setText("Generate File");
         generateButton.addActionListener(this);
-        add(generateButton);
+//        generateButton.setPreferredSize(new Dimension(400, 50));
+        c.gridx = 0;
+        c.gridy = 3;
+        c.gridwidth = 2;
+        add(generateButton,c);
 
         setVisible(true);
     }
@@ -58,23 +86,28 @@ public class Window extends JFrame implements ActionListener{
             String size = fileSize.getText();
             SecureRandom rndGen;
 
-            //Setting up the correct algorithm
-            try {
-                rndGen = SecureRandom.getInstance((String) Objects.requireNonNull(generators.getSelectedItem()));
-            } catch (NoSuchAlgorithmException e) {
-                throw new RuntimeException(e);
+            if (Objects.equals(loc, "")) {
+                localization.setText(generators.getSelectedItem()+"_sample"+".txt");
             }
-            //Creates a new file, if it does exist clear it
-            try {
-                FileWriter myWriter = new FileWriter(loc);
-                myWriter.flush();
-                //Writing the random numbers
-                for (int i = 0; i<(Integer.parseInt(size)); i++) {
-                    myWriter.write(rndGen.nextInt(11)+"\n");
+            else {
+                //Setting up the correct algorithm
+                try {
+                    rndGen = SecureRandom.getInstance((String) Objects.requireNonNull(generators.getSelectedItem()));
+                } catch (NoSuchAlgorithmException e) {
+                    throw new RuntimeException(e);
                 }
-                myWriter.close();
-            } catch (IOException e) {
-                System.out.println("ojojoj");
+                //Creates a new file, if it does exist clear it
+                try {
+                    FileWriter myWriter = new FileWriter(loc);
+                    myWriter.flush();
+                    //Writing the random numbers
+                    for (int i = 0; i < (Integer.parseInt(size)); i++) {
+                        myWriter.write(rndGen.nextInt(11) + "\n");
+                    }
+                    myWriter.close();
+                } catch (IOException e) {
+                    System.out.println("ojojoj");
+                }
             }
 
         }
