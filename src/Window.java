@@ -9,13 +9,14 @@ import java.security.SecureRandom;
 import java.security.Provider;
 import java.security.Security;
 import java.util.Objects;
+import java.lang.Math;
 
 public class Window extends JFrame implements ActionListener{
     private final JButton generateButton;
     private final JTextField fileSize;
     private final JTextField localization;
     private final JComboBox<String> generators;
-
+    private final long UPPERBOUND = (long) Math.pow(2, 32);
     //Creating the window
     public Window() {
         super("Illin'");
@@ -86,6 +87,7 @@ public class Window extends JFrame implements ActionListener{
             String size = fileSize.getText();
             SecureRandom rndGen;
 
+
             if (Objects.equals(loc, "")) {
                 localization.setText(generators.getSelectedItem()+"_sample"+".txt");
             }
@@ -100,9 +102,13 @@ public class Window extends JFrame implements ActionListener{
                 try {
                     FileWriter myWriter = new FileWriter(loc);
                     myWriter.flush();
+                    myWriter.write("#==================================================================\n" +
+                            "# generator Java " + generators.getSelectedItem() + "\n" +
+                            "#==================================================================\n");
+                    myWriter.write("type: d\n" + "count: " + size + "\n" + "numbit: 32\n");
                     //Writing the random numbers
                     for (int i = 0; i < (Integer.parseInt(size)); i++) {
-                        myWriter.write(rndGen.nextInt(11) + "\n");
+                        myWriter.write(rndGen.nextLong(UPPERBOUND) + "\n");
                     }
                     myWriter.close();
                 } catch (IOException e) {
