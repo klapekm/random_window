@@ -13,6 +13,7 @@ import java.lang.Math;
 
 public class Window extends JFrame implements ActionListener{
     private final JButton generateButton;
+    private JButton clearButton;
     private final JTextField fileSize;
     private final JTextField localization;
     private final JComboBox<String> generators;
@@ -22,7 +23,7 @@ public class Window extends JFrame implements ActionListener{
     public Window() {
         super("Illin'");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(500, 275);
+        setSize(600, 275);
         setLocation(50, 50);
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.HORIZONTAL;
@@ -46,7 +47,7 @@ public class Window extends JFrame implements ActionListener{
         //Adding an input window(file size)
         c.gridx = 0;
         c.gridy = 1;
-        add(new JLabel("File Size(num amount/bytes)"), c);
+        add(new JLabel("File Size (num_amount/bytes)"), c);
         fileSize = new JTextField();
         fileSize.setText("100");
         fileSize.setPreferredSize(new Dimension(75, 25));
@@ -85,11 +86,18 @@ public class Window extends JFrame implements ActionListener{
         generateButton = new JButton();
         generateButton.setText("Generate File");
         generateButton.addActionListener(this);
-//        generateButton.setPreferredSize(new Dimension(400, 50));
         c.gridx = 0;
         c.gridy = 4;
         c.gridwidth = 2;
         add(generateButton,c);
+
+        clearButton = new JButton("Clear");
+        c.ipadx = 25;
+        c.ipady = 0;
+        c.gridx = 3;
+        c.gridy = 3;
+        add(clearButton, c);
+        clearButton.addActionListener(this);
 
         setVisible(true);
     }
@@ -140,7 +148,7 @@ public class Window extends JFrame implements ActionListener{
                         DataOutputStream myOutputStream = new DataOutputStream(new FileOutputStream(loc));
                         myOutputStream.flush();
                         //Generating and writing random bytes
-                        byte[] my_bytes = new byte[1024];
+                        byte[] my_bytes = new byte[Integer.parseInt(size)*1048576];
                         rndGen.nextBytes(my_bytes);
                         myOutputStream.write(ByteBuffer.wrap(my_bytes).array());
                         myOutputStream.close();
@@ -151,6 +159,9 @@ public class Window extends JFrame implements ActionListener{
                 }
             }
 
+        }
+        if (source == clearButton) {
+            localization.setText("");
         }
     }
 }
