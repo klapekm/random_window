@@ -9,7 +9,7 @@ import java.security.SecureRandom;
 import java.security.Security;
 import java.util.*;
 
-class ConsoleVer{
+class JRDCli{
     public static void main(String[] args) throws IOException, NoSuchAlgorithmException {
         final long UPPERBOUND = (long) Math.pow(2, 32);
         String generator;
@@ -58,7 +58,7 @@ class ConsoleVer{
 
         }
         if(loc.equals("h")) {
-            System.out.print("File Path: " + generator + "." + data_type);
+            System.out.println("File Path: " + generator + "." + data_type);
             loc = (generator + "." + data_type);
         }
         SecureRandom rndGen = SecureRandom.getInstance(Objects.requireNonNull(generator));

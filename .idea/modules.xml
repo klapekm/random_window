@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/random_window.iml" filepath="$PROJECT_DIR$/random_window.iml" />
+      <module fileurl="file://$PROJECT_DIR$/java-random-data.iml" filepath="$PROJECT_DIR$/java-random-data.iml" />
     </modules>
   </component>
 </project>
